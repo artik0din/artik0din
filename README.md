@@ -57,9 +57,9 @@
 
 <div align="center">
   
-  ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=artik0din&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true)
+  ![GitHub Stats](https://github-readme-stats-chi-eight-33.vercel.app/api?username=artik0din&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true)
   
-  ![Top Languages](https://github-readme-stats.vercel.app/api/top-langs/?username=artik0din&layout=compact&theme=tokyonight&hide_border=true&langs_count=8)
+  ![Top Languages](https://github-readme-stats-chi-eight-33.vercel.app/api/top-langs/?username=artik0din&layout=compact&theme=tokyonight&hide_border=true&langs_count=8&count_private=true)
 
 </div>
 
