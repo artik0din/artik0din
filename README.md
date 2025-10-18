@@ -65,6 +65,29 @@
 
 ---
 
+## 🏆 Trophées GitHub
+
+<div align="center">
+  
+  ![trophy](https://github-profile-trophy.vercel.app/?username=artik0din&theme=tokyonight&no-frame=true&no-bg=true&column=4&margin-w=15&margin-h=15)
+
+</div>
+
+---
+
+## 📇 Profil Détaillé
+
+<div align="center">
+
+  ![Profile Details](https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=artik0din&theme=tokyonight)
+  
+  ![Repos per Language](https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=artik0din&theme=tokyonight)
+  ![Most Commit Language](https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=artik0din&theme=tokyonight)
+
+</div>
+
+---
+
 ## 🏆 Réalisations
 
 <div align="center">
