@@ -65,26 +65,6 @@
 
 ---
 
-## 🏆 Trophées GitHub
-
-<div align="center">
-  
-  ![trophy](https://github-profile-trophy.vercel.app/?username=artik0din&theme=tokyonight&no-frame=true&no-bg=true&column=4&margin-w=15&margin-h=15)
-
-</div>
-
----
-
-## 🏆 Réalisations
-
-<div align="center">
-
-  [![GitHub Streak](https://streak-stats.demolab.com/?user=artik0din&theme=tokyonight&hide_border=true)](https://git.io/streak-stats)
-
-</div>
-
----
-
 ## 🤝 Connectons-nous !
 
 <div align="center">
