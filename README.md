@@ -56,11 +56,23 @@
 ## 📊 Statistiques GitHub
 
 <div align="center">
-  
-  ![GitHub Stats](https://github-readme-stats-git-main-artik0dins-projects.vercel.app/api?username=artik0din&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true&cache_seconds=160)
-  
-  ![Top Languages](https://github-readme-stats-git-main-artik0dins-projects.vercel.app/api/top-langs/?username=artik0din&layout=compact&theme=tokyonight&hide_border=true&langs_count=8&count_private=true&cache_seconds=1800)
+  <img src="metrics-main.svg" alt="GitHub Metrics" />
+</div>
 
+<div align="center">
+  <img src="metrics-languages.svg" alt="Languages" />
+</div>
+
+<div align="center">
+  <img src="metrics-isocalendar.svg" alt="Contributions" />
+</div>
+
+---
+
+## 🏆 Contributions notables
+
+<div align="center">
+  <img src="metrics-notable.svg" alt="Notable contributions" />
 </div>
 
 ---
