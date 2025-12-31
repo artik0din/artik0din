@@ -1,173 +1,57 @@
 # ===================================================================================
-# GitHub Metrics - Workflow de generation automatique
+# GitHub Metrics - Workflow utilisant notre instance Heroku
 # ===================================================================================
-# Genere des metriques precises avec lowlighter/metrics
-# Inclut l'analyse approfondie des langages (indepth mode)
+# Utilise notre fork deploye sur Heroku pour eviter les bugs upstream
+# Instance: https://metrics-globodai-a4c5f72d6399.herokuapp.com/
 # ===================================================================================
 
 name: GitHub Metrics
 
 on:
-  # Mise a jour quotidienne a 6h00 UTC
   schedule:
     - cron: "0 6 * * *"
-
-  # Mise a jour a chaque push sur main/master
   push:
     branches:
       - main
       - master
-
-  # Permet de lancer manuellement
   workflow_dispatch:
 
+env:
+  METRICS_HOST: https://metrics-globodai-a4c5f72d6399.herokuapp.com
+
 jobs:
-  # ===========================================================================
-  # Metriques principales
-  # ===========================================================================
-  github-metrics-main:
+  generate-metrics:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Generate Main Metrics
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          filename: metrics-main.svg
-          user: artik0din
-          template: classic
-          base: header, activity, community, repositories, metadata
-          base_indepth: yes
-          config_timezone: Asia/Dubai
-          config_animations: yes
-          config_display: large
-          repositories_forks: yes
+        run: |
+          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=header,activity,community,repositories,metadata&base.indepth=true&config.timezone=Asia/Dubai&config.animations=true&config.display=large&repositories.forks=true&token=${{ secrets.METRICS_TOKEN }}" -o metrics-main.svg
 
-  # ===========================================================================
-  # Langages (analyse approfondie)
-  # ===========================================================================
-  github-metrics-languages:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
       - name: Generate Languages Metrics
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          filename: metrics-languages.svg
-          user: artik0din
-          template: classic
-          base: ""
-          plugin_languages: yes
-          plugin_languages_indepth: yes
-          plugin_languages_analysis_timeout: 30
-          plugin_languages_analysis_timeout_repositories: 10
-          plugin_languages_categories: programming, markup
-          plugin_languages_colors: github
-          plugin_languages_details: bytes-size, percentage, lines
-          plugin_languages_limit: 10
-          plugin_languages_recent_days: 365
-          plugin_languages_recent_load: 500
-          plugin_languages_sections: most-used
-          plugin_languages_threshold: 0%
-          plugin_languages_ignored: html, css, scss, less
-          repositories_affiliations: owner, collaborator, organization_member
-          commits_authoring: artik0din, kevin@globodai.com, Kevin V
+        run: |
+          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&plugin_languages=true&plugin_languages_indepth=true&plugin_languages_analysis_timeout=30&plugin_languages_categories=programming,markup&plugin_languages_colors=github&plugin_languages_details=bytes-size,percentage,lines&plugin_languages_limit=10&plugin_languages_sections=most-used&plugin_languages_ignored=html,css,scss,less&token=${{ secrets.METRICS_TOKEN }}" -o metrics-languages.svg
 
-  # ===========================================================================
-  # Calendrier isometrique
-  # ===========================================================================
-  github-metrics-isocalendar:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
       - name: Generate Isocalendar
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          filename: metrics-isocalendar.svg
-          user: artik0din
-          template: classic
-          base: ""
-          plugin_isocalendar: yes
-          plugin_isocalendar_duration: full-year
+        run: |
+          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&plugin_isocalendar=true&plugin_isocalendar_duration=full-year&token=${{ secrets.METRICS_TOKEN }}" -o metrics-isocalendar.svg
 
-  # ===========================================================================
-  # Achievements
-  # ===========================================================================
-  github-metrics-achievements:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
       - name: Generate Achievements
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          filename: metrics-achievements.svg
-          user: artik0din
-          template: classic
-          base: ""
-          plugin_achievements: yes
-          plugin_achievements_display: detailed
-          plugin_achievements_secrets: yes
-          plugin_achievements_threshold: C
-          # Exclure les achievements lies aux Projects (classic) deprecies
-          plugin_achievements_ignored: organizer, maintainer
+        run: |
+          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&plugin_achievements=true&plugin_achievements_display=detailed&plugin_achievements_secrets=true&plugin_achievements_threshold=C&token=${{ secrets.METRICS_TOKEN }}" -o metrics-achievements.svg
 
-  # ===========================================================================
-  # Activite recente
-  # ===========================================================================
-  github-metrics-activity:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Generate Activity
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          filename: metrics-activity.svg
-          user: artik0din
-          template: classic
-          base: ""
-          plugin_activity: yes
-          plugin_activity_limit: 5
-          plugin_activity_days: 14
-          # Filtrer uniquement les types d'evenements stables
-          plugin_activity_filter: push, issue, pr, release, fork, star
-          plugin_activity_visibility: public
-          plugin_activity_timestamps: yes
-
-  # ===========================================================================
-  # Habitudes de code
-  # ===========================================================================
-  github-metrics-habits:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
       - name: Generate Habits
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          filename: metrics-habits.svg
-          user: artik0din
-          template: classic
-          base: ""
-          config_timezone: Asia/Dubai
-          plugin_habits: yes
-          plugin_habits_charts: yes
-          plugin_habits_charts_type: classic
-          plugin_habits_days: 14
-          plugin_habits_facts: yes
-          # Reduire le nombre de commits pour eviter les commits sans auteur
-          plugin_habits_from: 100
-          plugin_habits_languages_limit: 8
-          plugin_habits_languages_threshold: 0%
-          # Utiliser uniquement les repos owner pour eviter les problemes
-          repositories_affiliations: owner
+        run: |
+          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&config.timezone=Asia/Dubai&plugin_habits=true&plugin_habits_charts=true&plugin_habits_charts_type=classic&plugin_habits_days=14&plugin_habits_facts=true&plugin_habits_from=100&token=${{ secrets.METRICS_TOKEN }}" -o metrics-habits.svg
 
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add *.svg
+          git diff --staged --quiet || git commit -m "Update metrics-*.svg - [Skip GitHub Action]"
+          git push
