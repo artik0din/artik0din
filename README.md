@@ -67,18 +67,6 @@
   <img src="metrics-isocalendar.svg" alt="Contributions" />
 </div>
 
-<div align="center">
-  <img src="metrics-achievements.svg" alt="Achievements" />
-</div>
-
-<div align="center">
-  <img src="metrics-habits.svg" alt="Coding Habits" />
-</div>
-
-<div align="center">
-  <img src="metrics-activity.svg" alt="Recent Activity" />
-</div>
-
 ---
 
 ## 🤝 Connectons-nous !
