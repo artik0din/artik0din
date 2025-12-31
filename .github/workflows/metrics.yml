@@ -1,19 +1,12 @@
 # ===================================================================================
-# GitHub Metrics - Workflow utilisant notre instance Heroku
+# GitHub Metrics - Using official lowlighter/metrics action
 # ===================================================================================
-# Utilise notre fork deploye sur Heroku pour eviter les bugs upstream
-# Instance: https://metrics-globodai-a4c5f72d6399.herokuapp.com/
-# ===================================================================================
-
 name: GitHub Metrics
 
 on:
   schedule:
     - cron: "0 6 * * *"
   workflow_dispatch:
-
-env:
-  METRICS_HOST: https://metrics-globodai-a4c5f72d6399.herokuapp.com
 
 jobs:
   generate-metrics:
@@ -25,29 +18,76 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Main Metrics
-        run: |
-          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=header,activity,community,repositories,metadata&base.indepth=true&config.timezone=Asia/Dubai&config.animations=true&config.display=large&repositories.forks=true&token=${{ secrets.METRICS_TOKEN }}" -o metrics-main.svg
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics-main.svg
+          user: artik0din
+          base: header, activity, community, repositories, metadata
+          base_indepth: yes
+          config_timezone: Asia/Dubai
+          config_animations: yes
+          config_display: large
+          repositories_forks: yes
 
       - name: Generate Languages Metrics
-        run: |
-          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&plugin_languages=true&plugin_languages_indepth=true&plugin_languages_analysis_timeout=30&plugin_languages_categories=programming,markup&plugin_languages_colors=github&plugin_languages_details=bytes-size,percentage,lines&plugin_languages_limit=10&plugin_languages_sections=most-used&plugin_languages_ignored=html,css,scss,less&token=${{ secrets.METRICS_TOKEN }}" -o metrics-languages.svg
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics-languages.svg
+          user: artik0din
+          base: ""
+          plugin_languages: yes
+          plugin_languages_indepth: yes
+          plugin_languages_analysis_timeout: 30
+          plugin_languages_categories: programming, markup
+          plugin_languages_colors: github
+          plugin_languages_details: bytes-size, percentage, lines
+          plugin_languages_limit: 10
+          plugin_languages_sections: most-used
+          plugin_languages_ignored: html, css, scss, less
 
       - name: Generate Isocalendar
-        run: |
-          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&plugin_isocalendar=true&plugin_isocalendar_duration=full-year&token=${{ secrets.METRICS_TOKEN }}" -o metrics-isocalendar.svg
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics-isocalendar.svg
+          user: artik0din
+          base: ""
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: full-year
 
       - name: Generate Achievements
-        run: |
-          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&plugin_achievements=true&plugin_achievements_display=detailed&plugin_achievements_secrets=true&plugin_achievements_threshold=C&token=${{ secrets.METRICS_TOKEN }}" -o metrics-achievements.svg
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics-achievements.svg
+          user: artik0din
+          base: ""
+          plugin_achievements: yes
+          plugin_achievements_display: detailed
+          plugin_achievements_secrets: yes
+          plugin_achievements_threshold: C
 
       - name: Generate Habits
-        run: |
-          curl -sL "${{ env.METRICS_HOST }}/artik0din?base=&config.timezone=Asia/Dubai&plugin_habits=true&plugin_habits_charts=true&plugin_habits_charts_type=classic&plugin_habits_days=14&plugin_habits_facts=true&plugin_habits_from=100&token=${{ secrets.METRICS_TOKEN }}" -o metrics-habits.svg
+        uses: lowlighter/metrics@latest
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics-habits.svg
+          user: artik0din
+          base: ""
+          config_timezone: Asia/Dubai
+          plugin_habits: yes
+          plugin_habits_charts: yes
+          plugin_habits_charts_type: classic
+          plugin_habits_days: 14
+          plugin_habits_facts: yes
+          plugin_habits_from: 100
 
       - name: Commit and Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add *.svg
-          git diff --staged --quiet || git commit -m "chore: update metrics [skip ci]"
+          git diff --staged --quiet || git commit -m "Update metrics-main.svg - [Skip GitHub Action]"
           git push
