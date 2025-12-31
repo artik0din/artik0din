@@ -1,5 +1,5 @@
 # ===================================================================================
-# GitHub Metrics - Using official lowlighter/metrics action
+# GitHub Metrics - Using globodai-group fork (with Projects Classic API fix)
 # ===================================================================================
 name: GitHub Metrics
 
@@ -17,8 +17,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Backup existing SVGs before generation
+      - name: Backup existing SVGs
+        run: |
+          mkdir -p /tmp/svg-backup
+          for svg in metrics-*.svg; do
+            [ -f "$svg" ] && cp "$svg" "/tmp/svg-backup/$svg"
+          done
+
       - name: Generate Main Metrics
-        uses: lowlighter/metrics@latest
+        id: main
+        continue-on-error: true
+        uses: globodai-group/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           filename: metrics-main.svg
@@ -31,7 +41,9 @@ jobs:
           repositories_forks: yes
 
       - name: Generate Languages Metrics
-        uses: lowlighter/metrics@latest
+        id: languages
+        continue-on-error: true
+        uses: globodai-group/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           filename: metrics-languages.svg
@@ -46,7 +58,9 @@ jobs:
           plugin_languages_ignored: html, css, scss, less
 
       - name: Generate Achievements
-        uses: lowlighter/metrics@latest
+        id: achievements
+        continue-on-error: true
+        uses: globodai-group/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           filename: metrics-achievements.svg
@@ -59,7 +73,9 @@ jobs:
           plugin_achievements_ignored: organizer
 
       - name: Generate Isocalendar
-        uses: lowlighter/metrics@latest
+        id: isocalendar
+        continue-on-error: true
+        uses: globodai-group/metrics@master
         with:
           token: ${{ secrets.METRICS_TOKEN }}
           filename: metrics-isocalendar.svg
@@ -68,11 +84,35 @@ jobs:
           plugin_isocalendar: yes
           plugin_isocalendar_duration: full-year
 
+      # Rollback invalid SVGs to previous version
+      - name: Validate and rollback invalid SVGs
+        run: |
+          echo "=== Validating generated SVGs ==="
+
+          for svg in metrics-*.svg; do
+            [ ! -f "$svg" ] && continue
+
+            # Check if SVG contains error indicators
+            if grep -qiE "Unexpected error|An error occurred|error.*occurred|GraphqlResponseError" "$svg" 2>/dev/null; then
+              echo "❌ $svg contains errors"
+
+              # Rollback to backup if exists
+              if [ -f "/tmp/svg-backup/$svg" ]; then
+                echo "   ↩️  Rolling back to previous version"
+                cp "/tmp/svg-backup/$svg" "$svg"
+              else
+                echo "   ⚠️  No backup available, keeping error SVG"
+              fi
+            else
+              echo "✅ $svg is valid"
+            fi
+          done
+
       - name: Commit and Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git pull --rebase origin main || true
           git add *.svg
-          git diff --staged --quiet || git commit -m "Update metrics-main.svg - [Skip GitHub Action]"
+          git diff --staged --quiet || git commit -m "Update metrics - [Skip GitHub Action]"
           git push
