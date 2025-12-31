@@ -67,6 +67,10 @@
   <img src="metrics-isocalendar.svg" alt="Contributions" />
 </div>
 
+<div align="center">
+  <img src="metrics-achievements.svg" alt="Achievements" />
+</div>
+
 ---
 
 ## 🤝 Connectons-nous !
