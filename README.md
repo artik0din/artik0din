@@ -69,14 +69,6 @@
 
 ---
 
-## 🏆 Contributions notables
-
-<div align="center">
-  <img src="metrics-notable.svg" alt="Notable contributions" />
-</div>
-
----
-
 ## 🤝 Connectons-nous !
 
 <div align="center">

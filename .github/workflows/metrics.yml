@@ -165,23 +165,3 @@ jobs:
           plugin_habits_languages_limit: 8
           plugin_habits_languages_threshold: 0%
 
-  # ===========================================================================
-  # Contributions notables
-  # ===========================================================================
-  github-metrics-notable:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Generate Notable Contributions
-        uses: lowlighter/metrics@latest
-        with:
-          token: ${{ secrets.METRICS_TOKEN }}
-          filename: metrics-notable.svg
-          user: artik0din
-          template: classic
-          base: ""
-          plugin_notable: yes
-          plugin_notable_from: all
-          plugin_notable_repositories: yes
-          plugin_notable_indepth: yes
