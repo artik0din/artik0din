@@ -1,8 +1,10 @@
 # ===================================================================================
 # GitHub Metrics - Using official lowlighter/metrics action
 # ===================================================================================
-# Fixed: Using official action with prebuilt Docker images instead of fork
-# The 'organizer' achievement is ignored as it uses deprecated Projects Classic API
+# Fixed: Pre-pull Docker image to work around fork detection bug in the action
+# The action's fork detection uses github.action which returns step name, not repo
+# This causes it to think it's running from a fork and try to rebuild locally
+# Pre-pulling and tagging the image bypasses this issue
 # ===================================================================================
 name: GitHub Metrics
 
@@ -19,6 +21,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # Pre-pull Docker image to avoid fork detection rebuilding issues
+      # The action has a bug where github.action returns step name instead of repo
+      # causing it to think it's a forked version and try to rebuild locally
+      - name: Pre-pull metrics Docker image
+        run: |
+          echo "Pulling prebuilt Docker image from GitHub Container Registry..."
+          docker pull ghcr.io/lowlighter/metrics:latest
+          # Tag with both versions the action might look for
+          docker tag ghcr.io/lowlighter/metrics:latest metrics:forked-3.34.0
+          docker tag ghcr.io/lowlighter/metrics:latest metrics:3.34.0
+          docker tag ghcr.io/lowlighter/metrics:latest metrics:latest
+          echo "Docker images ready:"
+          docker images | grep metrics
 
       # Backup existing SVGs before generation (only valid ones)
       - name: Backup existing valid SVGs
