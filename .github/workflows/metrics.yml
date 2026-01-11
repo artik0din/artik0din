@@ -1,10 +1,12 @@
 # ===================================================================================
-# GitHub Metrics - Using official lowlighter/metrics action
+# GitHub Metrics - Using dkhokhlov/metrics fork for achievements (projectsV2 fix)
 # ===================================================================================
-# Fixed: Pre-pull Docker image to work around fork detection bug in the action
-# The action's fork detection uses github.action which returns step name, not repo
-# This causes it to think it's running from a fork and try to rebuild locally
-# Pre-pulling and tagging the image bypasses this issue
+# The achievements plugin in lowlighter/metrics uses the deprecated Projects Classic
+# API (removed by GitHub in May 2024). PR #1769 fixes this by using projectsV2.
+# Until the PR is merged, we use dkhokhlov's fork which has the fix.
+#
+# dkhokhlov's Dockerfile uses a pre-built base image from GHCR, so we pre-pull
+# both the base image and tag it appropriately to avoid rebuild issues.
 # ===================================================================================
 name: GitHub Metrics
 
@@ -22,17 +24,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Pre-pull Docker image to avoid fork detection rebuilding issues
-      # The action has a bug where github.action returns step name instead of repo
-      # causing it to think it's a forked version and try to rebuild locally
-      - name: Pre-pull metrics Docker image
+      # Pre-pull Docker images to avoid rebuild issues
+      # 1. Pull official image for main/languages/isocalendar (lowlighter/metrics)
+      # 2. Pull base image used by dkhokhlov's fork for achievements (projectsV2 fix)
+      - name: Pre-pull metrics Docker images
         run: |
-          echo "Pulling prebuilt Docker image from GitHub Container Registry..."
+          echo "=== Pulling prebuilt Docker images from GHCR ==="
+
+          # Official lowlighter/metrics image for most plugins
+          echo "Pulling lowlighter/metrics:latest..."
           docker pull ghcr.io/lowlighter/metrics:latest
-          # Tag with both versions the action might look for
-          docker tag ghcr.io/lowlighter/metrics:latest metrics:forked-3.34.0
-          docker tag ghcr.io/lowlighter/metrics:latest metrics:3.34.0
           docker tag ghcr.io/lowlighter/metrics:latest metrics:latest
+          docker tag ghcr.io/lowlighter/metrics:latest metrics:3.34.0
+          docker tag ghcr.io/lowlighter/metrics:latest metrics:forked-3.34.0
+
+          # Base image used by dkhokhlov's fork (for achievements with projectsV2)
+          echo "Pulling lowlighter/metrics:v3.35-beta (base for dkhokhlov fork)..."
+          docker pull ghcr.io/lowlighter/metrics:v3.35-beta || echo "Warning: v3.35-beta not found, will use latest as fallback"
+
           echo "Docker images ready:"
           docker images | grep metrics
 
@@ -86,32 +95,27 @@ jobs:
           plugins_errors_fatal: no
 
       # ===================================================================================
-      # TEMPORARILY DISABLED: Achievements plugin
+      # Achievements plugin - Using dkhokhlov's fork with projectsV2 fix
       # ===================================================================================
-      # The achievements plugin uses the deprecated Projects Classic API which GitHub
-      # removed in May 2024. This causes a GraphQL error:
-      # "Projects (classic) is being deprecated in favor of the new Projects experience"
-      #
-      # There's an open issue: https://github.com/lowlighter/metrics/issues/1706
-      # And a PR in progress: https://github.com/lowlighter/metrics/pull/1769
-      #
-      # TODO: Re-enable this step once PR #1769 is merged into lowlighter/metrics
+      # The official lowlighter/metrics uses deprecated Projects Classic API (removed May 2024)
+      # dkhokhlov's fork (PR #1769) fixes this by using projectsV2 API
+      # Once PR #1769 is merged, switch back to lowlighter/metrics@latest
       # ===================================================================================
-      # - name: Generate Achievements
-      #   id: achievements
-      #   continue-on-error: true
-      #   uses: lowlighter/metrics@latest
-      #   with:
-      #     token: ${{ secrets.METRICS_TOKEN }}
-      #     filename: metrics-achievements.svg
-      #     user: artik0din
-      #     base: ""
-      #     plugin_achievements: yes
-      #     plugin_achievements_display: detailed
-      #     plugin_achievements_threshold: C
-      #     plugin_achievements_secrets: yes
-      #     plugin_achievements_ignored: organizer
-      #     plugins_errors_fatal: no
+      - name: Generate Achievements
+        id: achievements
+        continue-on-error: true
+        uses: dkhokhlov/metrics@master
+        with:
+          token: ${{ secrets.METRICS_TOKEN }}
+          filename: metrics-achievements.svg
+          user: artik0din
+          base: ""
+          plugin_achievements: yes
+          plugin_achievements_display: detailed
+          plugin_achievements_threshold: C
+          plugin_achievements_secrets: yes
+          plugin_achievements_ignored: organizer
+          plugins_errors_fatal: no
 
       - name: Generate Isocalendar
         id: isocalendar
