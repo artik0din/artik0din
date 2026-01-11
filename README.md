@@ -67,11 +67,11 @@
   <img src="metrics-isocalendar.svg" alt="Contributions" />
 </div>
 
-<!-- Achievements temporairement désactivé - Bug API GitHub Projects Classic -->
-<!-- https://github.com/lowlighter/metrics/issues/1706 -->
-<!-- <div align="center">
-  <img src="metrics-achievements.svg" alt="Achievements" />
-</div> -->
+## 🏆 Trophées GitHub
+
+<div align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=artik0din&theme=algolia&column=4&margin-w=15&margin-h=15&no-frame=true" alt="GitHub Trophies" />
+</div>
 
 ---
 
