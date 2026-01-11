@@ -70,7 +70,7 @@
 ## 🏆 Trophées GitHub
 
 <div align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=artik0din&theme=algolia&column=4&margin-w=15&margin-h=15&no-frame=true" alt="GitHub Trophies" />
+  <img src="https://github-profile-trophy-fork-two.vercel.app/?username=artik0din&theme=algolia&column=4&margin-w=15&margin-h=15&no-frame=true" alt="GitHub Trophies" />
 </div>
 
 ---
