@@ -67,9 +67,11 @@
   <img src="metrics-isocalendar.svg" alt="Contributions" />
 </div>
 
-<div align="center">
+<!-- Achievements temporairement désactivé - Bug API GitHub Projects Classic -->
+<!-- https://github.com/lowlighter/metrics/issues/1706 -->
+<!-- <div align="center">
   <img src="metrics-achievements.svg" alt="Achievements" />
-</div>
+</div> -->
 
 ---
 
