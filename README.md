@@ -1,4 +1,4 @@
-# 👋 Salut, moi c'est Kevin !
+# 👋 Salut, moi c'est Eric !
 
 <div align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=28&pause=1000&color=2E9EF7&center=true&vCenter=true&width=600&lines=Full+Stack+Developer+%F0%9F%9A%80;AI+Tools+Builder+%F0%9F%A4%96;DevOps+Enthusiast+%E2%9A%99%EF%B8%8F;Open+Source+Contributor+%F0%9F%92%BB" alt="Typing SVG" />
@@ -12,7 +12,7 @@
 - ☁️ Expérience avec **Heroku** et **AWS**
 - 👨‍💻 Tous mes projets sont disponibles sur [GitHub](https://github.com/artik0din)
 - 💬 Demandez-moi à propos de **JavaScript, React, Node.js, Adonis, Docker, CI/CD**
-- 📫 Comment me contacter : **[kevin@globodai.com](mailto:kevin@globodai.com)**
+- 📫 Comment me contacter : **[eric@globodai.com](mailto:eric@globodai.com)**
 
 ---
 
